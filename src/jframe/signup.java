@@ -81,6 +81,8 @@ public class signup extends javax.swing.JFrame {
         txt_email = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         txt_contact = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        btn_login = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -125,10 +127,11 @@ public class signup extends javax.swing.JFrame {
                 btn_cancelActionPerformed(evt);
             }
         });
-        jPanel2.add(btn_cancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 540, 100, 40));
+        jPanel2.add(btn_cancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 540, 100, 40));
 
         btn_register.setBackground(new java.awt.Color(0, 51, 255));
         btn_register.setFont(new java.awt.Font("Constantia", 0, 12)); // NOI18N
+        btn_register.setForeground(new java.awt.Color(255, 255, 255));
         btn_register.setText("REGISTER");
         btn_register.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -150,6 +153,23 @@ public class signup extends javax.swing.JFrame {
         jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 470, 100, 50));
         jPanel2.add(txt_contact, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 480, 310, 40));
 
+        jLabel1.setBackground(new java.awt.Color(102, 102, 255));
+        jLabel1.setFont(new java.awt.Font("Bahnschrift", 1, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 255));
+        jLabel1.setText("Have an account already? Login here");
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 590, 220, 50));
+
+        btn_login.setBackground(new java.awt.Color(0, 51, 255));
+        btn_login.setFont(new java.awt.Font("Constantia", 0, 12)); // NOI18N
+        btn_login.setForeground(new java.awt.Color(255, 255, 255));
+        btn_login.setText("LOGIN");
+        btn_login.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_loginActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btn_login, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 630, 100, 40));
+
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 0, 530, 830));
 
         setSize(new java.awt.Dimension(1537, 865));
@@ -165,6 +185,12 @@ public class signup extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_btn_cancelActionPerformed
+
+    private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
+        // TODO add your handling code here:
+        setVisible(false);
+        new login().setVisible(true);
+    }//GEN-LAST:event_btn_loginActionPerformed
 
     /**
      * @param args the command line arguments
@@ -203,7 +229,9 @@ public class signup extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_cancel;
+    private javax.swing.JButton btn_login;
     private javax.swing.JButton btn_register;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

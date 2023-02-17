@@ -79,6 +79,7 @@ public class login extends javax.swing.JFrame {
 
         btn_cancel.setBackground(new java.awt.Color(0, 51, 255));
         btn_cancel.setFont(new java.awt.Font("Constantia", 0, 12)); // NOI18N
+        btn_cancel.setForeground(new java.awt.Color(255, 255, 255));
         btn_cancel.setText("CANCEL");
         btn_cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -89,6 +90,7 @@ public class login extends javax.swing.JFrame {
 
         btn_login.setBackground(new java.awt.Color(0, 51, 255));
         btn_login.setFont(new java.awt.Font("Constantia", 0, 12)); // NOI18N
+        btn_login.setForeground(new java.awt.Color(255, 255, 255));
         btn_login.setText("LOGIN");
         btn_login.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
