@@ -83,6 +83,26 @@ public class signup extends javax.swing.JFrame {
         }
         return true;
     }
+    
+    public boolean checkDuplicateUsername(){
+        String name = txt_username.getText();
+        boolean isExist = false;
+        try {
+            Connection connection = DBConnection.getConnection();
+            
+            PreparedStatement prepState = connection.prepareStatement("select * from users where name = ?");
+            prepState.setString(1, name);
+            ResultSet setResult = prepState.executeQuery();
+            if(setResult.next()){
+                isExist = true;
+            }else {
+                isExist = false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return isExist;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -145,6 +165,12 @@ public class signup extends javax.swing.JFrame {
         jLabel6.setForeground(new java.awt.Color(0, 51, 255));
         jLabel6.setText("Username");
         jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 260, 100, 50));
+
+        txt_username.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txt_usernameFocusLost(evt);
+            }
+        });
         jPanel2.add(txt_username, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 270, 310, 40));
 
         btn_cancel.setBackground(new java.awt.Color(0, 51, 255));
@@ -207,8 +233,12 @@ public class signup extends javax.swing.JFrame {
 
     private void btn_registerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_registerActionPerformed
         // TODO add your handling code here:
-        if (validateSignup() == true) {
-            insertSignupDetails();
+        if (validateSignup() == true ) {
+            if(checkDuplicateUsername() == false){
+                insertSignupDetails();
+            } else {
+                JOptionPane.showMessageDialog(this, "Username already exists");
+            }
         }
     }//GEN-LAST:event_btn_registerActionPerformed
 
@@ -222,6 +252,13 @@ public class signup extends javax.swing.JFrame {
         setVisible(false);
         new login().setVisible(true);
     }//GEN-LAST:event_btn_loginActionPerformed
+
+    private void txt_usernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_usernameFocusLost
+        // TODO add your handling code here:
+        if(checkDuplicateUsername() == true){
+            JOptionPane.showMessageDialog(this, "Username already Exists.");
+        }
+    }//GEN-LAST:event_txt_usernameFocusLost
 
     /**
      * @param args the command line arguments
