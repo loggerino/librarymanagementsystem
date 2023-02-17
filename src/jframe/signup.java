@@ -1,4 +1,5 @@
 
+import java.awt.Toolkit;
 import java.net.ConnectException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -27,6 +28,7 @@ public class signup extends javax.swing.JFrame {
      */
     public signup() {
         initComponents();
+        setIconImage();
     }
     
     public void insertSignupDetails() {
@@ -55,6 +57,31 @@ public class signup extends javax.swing.JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    public boolean validateSignup(){
+        String name = txt_username.getText();
+        String password = txt_password.getText();
+        String email = txt_email.getText();
+        String contact = txt_contact.getText();
+        
+        if(name.equals("")){
+            JOptionPane.showMessageDialog(this, "Please Enter Username");
+            return false;
+        }
+        if(password.equals("")){
+            JOptionPane.showMessageDialog(this, "Please Enter Password");
+            return false;
+        }
+        if(email.equals("") || !email.matches("^(.+)@(\\S+)$")){
+            JOptionPane.showMessageDialog(this, "Please Enter Valid Email");
+            return false;
+        }
+        if(contact.equals("")){
+            JOptionPane.showMessageDialog(this, "Please Enter Contact");
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -85,6 +112,7 @@ public class signup extends javax.swing.JFrame {
         btn_login = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("SIgnup");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -121,6 +149,7 @@ public class signup extends javax.swing.JFrame {
 
         btn_cancel.setBackground(new java.awt.Color(0, 51, 255));
         btn_cancel.setFont(new java.awt.Font("Constantia", 0, 12)); // NOI18N
+        btn_cancel.setForeground(new java.awt.Color(255, 255, 255));
         btn_cancel.setText("CANCEL");
         btn_cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -178,7 +207,9 @@ public class signup extends javax.swing.JFrame {
 
     private void btn_registerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_registerActionPerformed
         // TODO add your handling code here:
-        insertSignupDetails();
+        if (validateSignup() == true) {
+            insertSignupDetails();
+        }
     }//GEN-LAST:event_btn_registerActionPerformed
 
     private void btn_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelActionPerformed
@@ -246,4 +277,8 @@ public class signup extends javax.swing.JFrame {
     private javax.swing.JPasswordField txt_password;
     private javax.swing.JTextField txt_username;
     // End of variables declaration//GEN-END:variables
+
+    private void setIconImage() {
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/icons/keyed.png")));
+    }
 }

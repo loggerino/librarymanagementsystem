@@ -1,4 +1,5 @@
 
+import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
@@ -17,8 +18,13 @@ public class login extends javax.swing.JFrame {
     /**
      * Creates new form login
      */
+    
+    
+    
     public login() {
         initComponents();
+        setIconImage();
+        
     }
 
     /**
@@ -41,8 +47,11 @@ public class login extends javax.swing.JFrame {
         btn_cancel = new javax.swing.JButton();
         btn_login = new javax.swing.JButton();
         txt_password = new javax.swing.JPasswordField();
+        btn_register = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Login");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -100,6 +109,23 @@ public class login extends javax.swing.JFrame {
         jPanel2.add(btn_login, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 430, 100, 40));
         jPanel2.add(txt_password, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 340, 310, 40));
 
+        btn_register.setBackground(new java.awt.Color(0, 51, 255));
+        btn_register.setFont(new java.awt.Font("Constantia", 0, 12)); // NOI18N
+        btn_register.setForeground(new java.awt.Color(255, 255, 255));
+        btn_register.setText("REGISTER");
+        btn_register.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_registerActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btn_register, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 510, 100, 40));
+
+        jLabel1.setBackground(new java.awt.Color(102, 102, 255));
+        jLabel1.setFont(new java.awt.Font("Bahnschrift", 1, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 255));
+        jLabel1.setText("New User Registration");
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 470, 220, 50));
+
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 0, 530, 830));
 
         setSize(new java.awt.Dimension(1537, 865));
@@ -120,6 +146,12 @@ public class login extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_btn_cancelActionPerformed
+
+    private void btn_registerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_registerActionPerformed
+        // TODO add your handling code here:
+        setVisible(false);
+        new signup().setVisible(true);
+    }//GEN-LAST:event_btn_registerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -147,7 +179,7 @@ public class login extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -159,6 +191,8 @@ public class login extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_cancel;
     private javax.swing.JButton btn_login;
+    private javax.swing.JButton btn_register;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -169,4 +203,9 @@ public class login extends javax.swing.JFrame {
     private javax.swing.JPasswordField txt_password;
     private javax.swing.JTextField txt_username;
     // End of variables declaration//GEN-END:variables
+
+    private void setIconImage() {
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/icons/locked.png")));
+    }
+    
 }
