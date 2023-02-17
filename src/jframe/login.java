@@ -19,12 +19,25 @@ public class login extends javax.swing.JFrame {
      * Creates new form login
      */
     
-    
-    
     public login() {
         initComponents();
         setIconImage();
         
+    }
+    
+    public boolean validateLogin() {
+        String name = txt_username.getText();
+        String password = txt_password.getText();
+        
+        if(name.equals("")){
+            JOptionPane.showMessageDialog(this, "Please Enter Username");
+            return false;
+        }
+        if(password.equals("")){
+            JOptionPane.showMessageDialog(this, "Please Enter Password");
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -134,6 +147,7 @@ public class login extends javax.swing.JFrame {
 
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
         // TODO add your handling code here:
+        validateLogin();
         if(txt_username.getText().equals("admin") && txt_password.getText().equals("admin")) {
             setVisible(false);
             new home().setVisible(true);
