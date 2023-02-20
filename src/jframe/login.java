@@ -1,5 +1,9 @@
 
+import com.mysql.cj.protocol.Resultset;
 import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
@@ -38,6 +42,31 @@ public class login extends javax.swing.JFrame {
             return false;
         }
         return true;
+    }
+    
+    public void login(){
+        String name = txt_username.getText();
+        String password = txt_password.getText();
+        
+        try {
+            Connection connection = DBConnection.getConnection();
+            String sql = "select * from users where name = ? and password = ?";
+            PreparedStatement prepStatement = connection.prepareStatement(sql);
+            prepStatement.setString(1, name);
+            prepStatement.setString(2, password);
+            
+            ResultSet setResult = prepStatement.executeQuery();
+            if(setResult.next()){
+                JOptionPane.showMessageDialog(this, "Login Successful");
+                home Homepage = new home();
+                Homepage.setVisible(true);
+                this.dispose();
+            }else{
+                JOptionPane.showMessageDialog(this, "Incorrect Login Credentials");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -147,13 +176,10 @@ public class login extends javax.swing.JFrame {
 
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
         // TODO add your handling code here:
-        validateLogin();
-        if(txt_username.getText().equals("admin") && txt_password.getText().equals("admin")) {
-            setVisible(false);
-            new home().setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null,"Incorrect Username/Password");
+        if(validateLogin()){
+            login();
         }
+        
     }//GEN-LAST:event_btn_loginActionPerformed
 
     private void btn_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelActionPerformed
