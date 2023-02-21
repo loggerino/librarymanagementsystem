@@ -98,9 +98,8 @@ public class managebooks extends javax.swing.JFrame {
             DFT.addRow(new Object[]{id,title,author,quantity});
         }
     }
-    
+    int search;
     public boolean Search() {
-        int search = 0;
         try {
             search = Integer.parseInt(JOptionPane.showInputDialog("Enter Book ID"));
         } catch (NumberFormatException e) {
@@ -118,6 +117,35 @@ public class managebooks extends javax.swing.JFrame {
             txt_quantity.setText(String.valueOf(books.getQuantity()));
             return true;
         }
+    }
+    
+    public void Edit(){
+        librarybooks books = new librarybooks();
+        String title = txt_title.getText();
+        String author = txt_author.getText();
+        int quantity = Integer.parseInt(txt_quantity .getText());
+        
+        books.setBook_name(title);
+        books.setAuthor(author);
+        books.setQuantity(quantity);
+        books.setBook_id(search);
+        booksDAOimpl dao = new booksDAOimpl();
+        dao.update(books);
+        Load();
+        txt_title.setText("");
+        txt_author.setText("");
+        txt_quantity.setText("");
+    }
+    
+    public void Delete(){
+        librarybooks books = new librarybooks();
+        books.setBook_id(search);
+        booksDAOimpl dao = new booksDAOimpl();
+        dao.delete(books);
+        Load();
+        txt_title.setText("");
+        txt_author.setText("");
+        txt_quantity.setText("");
     }
 
     /**
@@ -329,10 +357,12 @@ public class managebooks extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        Edit();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+        Delete();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void txt_titleFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_titleFocusLost
