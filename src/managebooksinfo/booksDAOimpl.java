@@ -6,9 +6,12 @@ package managebooksinfo;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import managebooks.librarybooks;
+import java.sql.ResultSet;
+
 
 /**
  *
@@ -48,12 +51,62 @@ public class booksDAOimpl implements booksDAO{
 
     @Override
     public librarybooks get(int book_id) {
-        return null;
+        librarybooks books = new librarybooks();
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/library_ms","root","");
+            String sql = "SELECT * FROM book_details WHERE book_id=?";
+            PreparedStatement prepStatement = connection.prepareStatement(sql);
+            prepStatement.setInt(1, book_id);
+            ResultSet rs = prepStatement.executeQuery();
+            if(rs.next()){
+                
+                books.setBook_id(rs.getInt("book_id"));
+                books.setBook_name(rs.getString("book_name"));
+                books.setAuthor(rs.getString("author"));
+                books.setQuantity(rs.getInt("quantity"));
+ 
+            } else {
+                JOptionPane.showMessageDialog(null, "No book with ID " + book_id + " found.", "Error", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error");
+        }
+        return books;
     }
 
     @Override
     public List<librarybooks> list() {
-        return null;
+        
+    List<librarybooks> list = new ArrayList<librarybooks>();
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/library_ms","root","");
+            String sql = "SELECT * FROM book_details ";
+            PreparedStatement prepStatement = connection.prepareStatement(sql);
+            ResultSet rs = prepStatement.executeQuery();
+            
+            
+            
+            while(rs.next()){
+                librarybooks books = new librarybooks();
+                books.setBook_id(rs.getInt("book_id"));
+                books.setBook_name(rs.getString("book_name"));
+                books.setAuthor(rs.getString("author"));
+                books.setQuantity(rs.getInt("quantity"));
+ 
+                list.add(books);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error");
+        }
+        return list;
+  
     }
     
 }

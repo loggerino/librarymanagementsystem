@@ -2,7 +2,9 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import managebooks.librarybooks;
 import managebooksinfo.booksDAOimpl;
 
@@ -21,6 +23,7 @@ public class managebooks extends javax.swing.JFrame {
      */
     public managebooks() {
         initComponents();
+        Load();
     }
     
     public void insertBooks(){
@@ -35,7 +38,7 @@ public class managebooks extends javax.swing.JFrame {
         
         booksDAOimpl dao = new booksDAOimpl();
         dao.save(book_details);
-        
+        Load();
         txt_title.setText("");
         txt_quantity.setText("");
         txt_author.setText("");
@@ -80,6 +83,42 @@ public class managebooks extends javax.swing.JFrame {
         }
         return isExist;
     }
+    
+    public void Load(){
+        booksDAOimpl dao = new booksDAOimpl();
+        List<librarybooks> list = dao.list();
+        DefaultTableModel DFT = (DefaultTableModel) jTable1.getModel();
+        DFT.setRowCount(0);
+        for(librarybooks books: list)
+        {
+            int id = books.getBook_id();
+            String title = books.getBook_name();
+            String author = books.getAuthor();
+            int quantity = books.getQuantity();
+            DFT.addRow(new Object[]{id,title,author,quantity});
+        }
+    }
+    
+    public boolean Search() {
+        int search = 0;
+        try {
+            search = Integer.parseInt(JOptionPane.showInputDialog("Enter Book ID"));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Invalid Book ID", "Error", JOptionPane.ERROR_MESSAGE);
+        return false;
+        }
+
+        booksDAOimpl dao = new booksDAOimpl();
+        librarybooks books  = dao.get(search);
+        if (books == null) {
+            return false;
+        } else {
+            txt_title.setText(books.getBook_name());
+            txt_author.setText(books.getAuthor());
+            txt_quantity.setText(String.valueOf(books.getQuantity()));
+            return true;
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -105,6 +144,8 @@ public class managebooks extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -131,7 +172,7 @@ public class managebooks extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -227,9 +268,33 @@ public class managebooks extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 0, 1110, 830));
 
-        setSize(new java.awt.Dimension(1534, 867));
+        jTable1.setBackground(new java.awt.Color(204, 204, 204));
+        jTable1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jTable1.setFont(new java.awt.Font("Candara", 0, 18)); // NOI18N
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Book Title", "Author", "Quantity"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+
+        jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 28, 780, 550));
+
+        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 0, 870, 830));
+
+        setSize(new java.awt.Dimension(1286, 625));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -249,6 +314,7 @@ public class managebooks extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        Search();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -323,6 +389,8 @@ public class managebooks extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTextField txt_author;
     private javax.swing.JTextField txt_quantity;
     private javax.swing.JTextField txt_title;
