@@ -63,8 +63,10 @@ public class StudentManager {
             ps.setString(3, students.getFaculty());
             ps.setInt(4, students.getStudentID());
             ps.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Updated!");
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Update Failed");
         }
     }
     

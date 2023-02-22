@@ -64,7 +64,49 @@ public class managestudents extends javax.swing.JFrame {
         return true;
     }
     
+    int search;
+    public boolean Search(){
+        try {
+            search = Integer.parseInt(JOptionPane.showInputDialog("Enter Student ID"));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Invalid Student ID", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        StudentManager dao = new StudentManager();
+        Student students = dao.get(search);
+        if(students == null){
+            return false;
+        } else {
+            txt_studentname.setText(students.getName());
+            combo_Course.setSelectedItem(students.getCourse());
+            combo_faculty.setSelectedItem(students.getFaculty());
+            return true;
+        }
+    }
     
+    public void Edit(){
+        Student students = new Student();
+        String studentName = txt_studentname.getText();
+        String course = combo_Course.getSelectedItem().toString();
+        String faculty = combo_faculty.getSelectedItem().toString();
+        
+        students.setName(studentName);
+        students.setCourse(course);
+        students.setFaculty(faculty);
+        students.setStudentID(search);
+        StudentManager dao = new StudentManager();
+        dao.update(students); 
+        Load();
+        txt_studentname.setText("");
+    }
+    
+    public void Delete(){
+        Student students = new Student();
+        students.setStudentID(search);
+        StudentManager dao = new StudentManager();
+        dao.delete(students); 
+        Load();
+        txt_studentname.setText("");
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -279,15 +321,15 @@ public class managestudents extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        
+        Delete();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        
+        Edit();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
+        Search();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
