@@ -6,7 +6,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.librarybooks;
-import managebooksinfo.booksDAOimpl;
+import controller.booksDAOimpl;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license

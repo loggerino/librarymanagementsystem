@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package managebooksinfo;
+package controller;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -119,8 +119,6 @@ public class booksDAOimpl implements booksDAO{
             String sql = "SELECT * FROM book_details ";
             PreparedStatement prepStatement = connection.prepareStatement(sql);
             ResultSet rs = prepStatement.executeQuery();
-            
-            
             
             while(rs.next()){
                 librarybooks books = new librarybooks();
