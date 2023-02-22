@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import managebooks.librarybooks;
+import model.librarybooks;
 import managebooksinfo.booksDAOimpl;
 
 /*

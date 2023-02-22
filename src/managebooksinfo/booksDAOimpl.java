@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-import managebooks.librarybooks;
+import model.librarybooks;
 import java.sql.ResultSet;
 
 

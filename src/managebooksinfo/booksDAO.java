@@ -5,7 +5,7 @@
 package managebooksinfo;
 
 import java.util.List;
-import managebooks.librarybooks;
+import model.librarybooks;
 
 /**
  *
