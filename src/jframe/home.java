@@ -1,3 +1,5 @@
+package jframe;
+
 
 import java.awt.Color;
 import jframe.managestudents;

@@ -1,3 +1,5 @@
+package jframe;
+
 import java.awt.Toolkit;
 import java.net.ConnectException;
 import javax.swing.JFrame;
