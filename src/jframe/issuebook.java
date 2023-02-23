@@ -108,23 +108,21 @@ public class issuebook extends javax.swing.JFrame {
         return returnDate;
     }
 
-    public void calculateDuration() {
+    public int calculateDuration() {
+        int durationInDays = 0;
         try {
-            // Get the issue and return dates
             Date issueDate = getIssueDate();
             Date returnDate = getReturnDate();
 
-            // Calculate the duration between the issue and return dates
             long durationInMillis = returnDate.getTime() - issueDate.getTime();
-            long durationInDays = TimeUnit.MILLISECONDS.toDays(durationInMillis);
+            durationInDays = (int) TimeUnit.MILLISECONDS.toDays(durationInMillis);
 
-            // Display the duration in a label or store it as necessary
             lbl_duration.setText(Long.toString(durationInDays) + " days");
         } catch (ParseException e) {
-            // Handle the case where the input dates are invalid
             JOptionPane.showMessageDialog(this, "Please enter valid dates in the format yyyy-MM-dd");
             e.printStackTrace();
         }
+        return durationInDays;
     }
 
     public boolean issueBook() throws ParseException {
@@ -138,18 +136,21 @@ public class issuebook extends javax.swing.JFrame {
         Long l1 = uIssueDate.getTime();
         long l2 = uDueDate.getTime();
 
+        int duration = calculateDuration();
+
         java.sql.Date sIssueDate = new java.sql.Date(l1);
         java.sql.Date sDueDate = new java.sql.Date(l2);
 
         try {
             Connection connection = DBConnection.getConnection();
-            String sql = "insert into issuebook(book_id,studentID,issue_date,due_date,status) values(?,?,?,?,?)";
+            String sql = "insert into issuebook(book_id,studentID,issue_date,due_date,duration,status) values(?,?,?,?,?,?)";
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setInt(1, bookId);
             pst.setInt(2, studentId);
             pst.setDate(3, sIssueDate);
             pst.setDate(4, sDueDate);
-            pst.setString(5, "pending");
+            pst.setInt(5, duration);
+            pst.setString(6, "pending");
             int rowCount = pst.executeUpdate();
             if (rowCount > 0) {
                 isIssued = true;
@@ -207,7 +208,16 @@ public class issuebook extends javax.swing.JFrame {
 
     }
 
-    public void displayReceipt(Student student, librarybooks book) {
+    public void displayReceipt(Student student, librarybooks book) throws ParseException {
+
+        Date issueDate = getIssueDate();
+        Date returnDate = getReturnDate();
+        int duration = calculateDuration();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        String issueDateStr = dateFormat.format(issueDate);
+        String returnDateStr = dateFormat.format(returnDate);
+
         String message = "Book Issued:\n\n"
                 + "Title: " + book.getBook_name() + "\n"
                 + "Author: " + book.getAuthor() + "\n"
@@ -216,7 +226,10 @@ public class issuebook extends javax.swing.JFrame {
                 + "Name: " + student.getName() + "\n"
                 + "Student ID.: " + student.getStudentID() + "\n"
                 + "Course: " + student.getCourse() + "\n"
-                + "Faculty: " + student.getFaculty() + "\n";
+                + "Faculty: " + student.getFaculty() + "\n\n"
+                + "Issue Date: " + issueDateStr + "\n"
+                + "Return Date: " + returnDateStr + "\n"
+                + "Duration: " + duration + " days";
         JOptionPane.showMessageDialog(null, message, "Receipt", JOptionPane.INFORMATION_MESSAGE);
     }
 
@@ -262,6 +275,7 @@ public class issuebook extends javax.swing.JFrame {
         jLabel23 = new javax.swing.JLabel();
         lbl_duration = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jLabel24 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -452,8 +466,8 @@ public class issuebook extends javax.swing.JFrame {
 
         jLabel23.setFont(new java.awt.Font("Franklin Gothic Medium Cond", 0, 18)); // NOI18N
         jLabel23.setForeground(new java.awt.Color(0, 51, 255));
-        jLabel23.setText("Return Date");
-        jPanel3.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 340, 80, 40));
+        jLabel23.setText("Duration");
+        jPanel3.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 400, 80, 40));
 
         lbl_duration.setFont(new java.awt.Font("Franklin Gothic Medium Cond", 0, 18)); // NOI18N
         lbl_duration.setForeground(new java.awt.Color(0, 51, 255));
@@ -469,6 +483,11 @@ public class issuebook extends javax.swing.JFrame {
             }
         });
         jPanel3.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 450, -1, -1));
+
+        jLabel24.setFont(new java.awt.Font("Franklin Gothic Medium Cond", 0, 18)); // NOI18N
+        jLabel24.setForeground(new java.awt.Color(0, 51, 255));
+        jLabel24.setText("Return Date");
+        jPanel3.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 340, 80, 40));
 
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 0, 520, 720));
 
@@ -601,6 +620,7 @@ public class issuebook extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
