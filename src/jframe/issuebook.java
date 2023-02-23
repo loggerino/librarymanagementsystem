@@ -35,7 +35,7 @@ public class issuebook extends javax.swing.JFrame {
         initComponents();
     }
 
-    public void getBookDetails() {
+    private librarybooks getBookDetails() {
         librarybooks books = new librarybooks();
         int bookID = Integer.parseInt(txt_bookid.getText());
         booksDAOimpl dao = new booksDAOimpl();
@@ -49,9 +49,10 @@ public class issuebook extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Book not found.", "Error", JOptionPane.ERROR_MESSAGE);
         }
+        return books;
     }
 
-    public void getStudentDetails() {
+    private Student getStudentDetails() {
         Student students = new Student();
         int studentID = Integer.parseInt(txt_studentid.getText());
         StudentManager dao = new StudentManager();
@@ -65,6 +66,7 @@ public class issuebook extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Student not found.", "Error", JOptionPane.ERROR_MESSAGE);
         }
+        return students;
     }
 
     private DateFormat[] formats = new DateFormat[]{
@@ -203,6 +205,19 @@ public class issuebook extends javax.swing.JFrame {
         }
         return isAlreadyIssued;
 
+    }
+
+    public void displayReceipt(Student student, librarybooks book) {
+        String message = "Book Issued:\n\n"
+                + "Title: " + book.getBook_name() + "\n"
+                + "Author: " + book.getAuthor() + "\n"
+                + "Book ID: " + book.getBook_id() + "\n\n"
+                + "Student Details:\n\n"
+                + "Name: " + student.getName() + "\n"
+                + "Student ID.: " + student.getStudentID() + "\n"
+                + "Course: " + student.getCourse() + "\n"
+                + "Faculty: " + student.getFaculty() + "\n";
+        JOptionPane.showMessageDialog(null, message, "Receipt", JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
@@ -512,22 +527,28 @@ public class issuebook extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             if (lbl_quantity.getText().equals("0")) {
-                JOptionPane.showMessageDialog(this, "book is not available");
+                JOptionPane.showMessageDialog(this, "Book is not available");
             } else {
                 if (isAlreadyIssued() == false) {
-                    if (issueBook() == true) {
-                        JOptionPane.showMessageDialog(this, "Book issued");
-                        updateBookCount();
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Book issue failed");
+                    Student student = getStudentDetails();
+                    librarybooks books = getBookDetails();
+                    if (books != null && student != null) {
+                        if (issueBook() == true) {
+                            JOptionPane.showMessageDialog(this, "Book issued");
+                            updateBookCount();
+                            displayReceipt(student, books);
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Book issue failed");
+                        }
                     }
                 } else {
-                    JOptionPane.showMessageDialog(this, "this student already has this book");
+                    JOptionPane.showMessageDialog(this, "Book has already been issued to this student");
                 }
             }
         } catch (ParseException ex) {
             Logger.getLogger(issuebook.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
