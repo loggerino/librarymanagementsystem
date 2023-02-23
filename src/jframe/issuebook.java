@@ -16,6 +16,11 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.Student;
 import model.librarybooks;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
  *
@@ -63,10 +68,7 @@ public class issuebook extends javax.swing.JFrame {
     }
 
     private DateFormat[] formats = new DateFormat[]{
-        new SimpleDateFormat("yyyyMMdd"),
-        new SimpleDateFormat("dd/MM/yyyy"),
-        new SimpleDateFormat("yyyy/MM/dd"),
-        new SimpleDateFormat("dd MMM yyyy")
+        new SimpleDateFormat("yyyy-MM-dd")
     };
 
     private Date getIssueDate() throws ParseException {
@@ -77,11 +79,12 @@ public class issuebook extends javax.swing.JFrame {
                 issueDate = format.parse(issueDateStr);
                 break;
             } catch (ParseException e) {
-                // Do nothing, try next format
+                JOptionPane.showMessageDialog(this, "Please enter valid dates in the format yyyy-MM-dd");
             }
         }
         if (issueDate == null) {
             throw new ParseException("Unparseable date: " + issueDateStr, 0);
+
         }
         return issueDate;
     }
@@ -117,9 +120,89 @@ public class issuebook extends javax.swing.JFrame {
             lbl_duration.setText(Long.toString(durationInDays) + " days");
         } catch (ParseException e) {
             // Handle the case where the input dates are invalid
-            JOptionPane.showMessageDialog(this, "Please enter valid dates in the format yyyyMMdd, dd/MM/yyyy, yyyy/MM/dd, or dd MMM yyyy");
+            JOptionPane.showMessageDialog(this, "Please enter valid dates in the format yyyy-MM-dd");
             e.printStackTrace();
         }
+    }
+
+    public boolean issueBook() throws ParseException {
+        boolean isIssued = false;
+        int bookId = Integer.parseInt(txt_bookid.getText());
+        int studentId = Integer.parseInt(txt_studentid.getText());
+
+        Date uIssueDate = getIssueDate();
+        Date uDueDate = getReturnDate();
+
+        Long l1 = uIssueDate.getTime();
+        long l2 = uDueDate.getTime();
+
+        java.sql.Date sIssueDate = new java.sql.Date(l1);
+        java.sql.Date sDueDate = new java.sql.Date(l2);
+
+        try {
+            Connection connection = DBConnection.getConnection();
+            String sql = "insert into issuebook(book_id,studentID,issue_date,due_date,status) values(?,?,?,?,?)";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setInt(1, bookId);
+            pst.setInt(2, studentId);
+            pst.setDate(3, sIssueDate);
+            pst.setDate(4, sDueDate);
+            pst.setString(5, "pending");
+            int rowCount = pst.executeUpdate();
+            if (rowCount > 0) {
+                isIssued = true;
+            } else {
+                isIssued = false;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Other code for issuing the book
+        return isIssued;
+    }
+
+    public void updateBookCount() {
+        int bookID = Integer.parseInt(txt_bookid.getText());
+        booksDAOimpl dao = new booksDAOimpl();
+        librarybooks book = dao.get(bookID);
+        if (book.getQuantity() > 0) {
+            book.setQuantity(book.getQuantity() - 1);
+            dao.update(book);
+            lbl_quantity.setText(String.valueOf(book.getQuantity()));
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Book is not available");
+        }
+    }
+
+    public boolean isAlreadyIssued() {
+
+        boolean isAlreadyIssued = false;
+        int bookId = Integer.parseInt(txt_bookid.getText());
+        int studentId = Integer.parseInt(txt_studentid.getText());
+
+        try {
+            Connection con = DBConnection.getConnection();
+            String sql = "select * from issuebook where book_id = ? and studentID = ? and status = ?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setInt(1, bookId);
+            pst.setInt(2, studentId);
+            pst.setString(3, "pending");
+
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                isAlreadyIssued = true;
+            } else {
+                isAlreadyIssued = false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return isAlreadyIssued;
+
     }
 
     /**
@@ -163,6 +246,7 @@ public class issuebook extends javax.swing.JFrame {
         txt_returndate = new javax.swing.JTextField();
         jLabel23 = new javax.swing.JLabel();
         lbl_duration = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -360,6 +444,17 @@ public class issuebook extends javax.swing.JFrame {
         lbl_duration.setForeground(new java.awt.Color(0, 51, 255));
         jPanel3.add(lbl_duration, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 400, 180, 40));
 
+        jButton1.setBackground(new java.awt.Color(0, 0, 255));
+        jButton1.setFont(new java.awt.Font("Franklin Gothic Medium Cond", 0, 14)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Issue");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel3.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 450, -1, -1));
+
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 0, 520, 720));
 
         pack();
@@ -412,6 +507,28 @@ public class issuebook extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_returndateActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            // TODO add your handling code here:
+            if (lbl_quantity.getText().equals("0")) {
+                JOptionPane.showMessageDialog(this, "book is not available");
+            } else {
+                if (isAlreadyIssued() == false) {
+                    if (issueBook() == true) {
+                        JOptionPane.showMessageDialog(this, "Book issued");
+                        updateBookCount();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Book issue failed");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "this student already has this book");
+                }
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(issuebook.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -448,6 +565,7 @@ public class issuebook extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel13;
