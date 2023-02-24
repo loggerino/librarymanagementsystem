@@ -4,15 +4,21 @@
  */
 package model;
 
+import java.util.Date;
+
 /**
  *
  * @author chyis
  */
 public class librarybooks {
+
     private int book_id;
     private String book_name;
     private String author;
     private int quantity;
+    private Date issuedate;
+    private Date returndate;
+    private int duration;
 
     public int getBook_id() {
         return book_id;
@@ -45,6 +51,29 @@ public class librarybooks {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-    
-    
+
+    public Date getIssuedate() {
+        return issuedate;
+    }
+
+    public void setIssuedate(Date issuedate) {
+        this.issuedate = issuedate;
+    }
+
+    public Date getReturndate() {
+        return returndate;
+    }
+
+    public void setReturndate(Date returndate) {
+        this.returndate = returndate;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
 }
